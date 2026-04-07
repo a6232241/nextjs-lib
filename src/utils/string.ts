@@ -21,3 +21,26 @@ export const getFirstHighlightedText = (text: string, search: string) => {
 
   return parts;
 }
+
+/**
+ * 計算字串的語素長度 (Grapheme Clusters)。
+ * 支援 Emoji (含 ZWJ 多重組合)、擴充字元集 (Surrogate Pairs) 等。
+ * 在此邏輯下，'abc' 為 3，'妳好' 為 2，'𠮷' 為 1，'👨‍👩‍👧‍👧' 為 1。
+ * 
+ * @param text 要計算的文字
+ * @returns 語素字數
+ */
+export const getGraphemeLength = (text: string): number => {
+  if (!text) return 0;
+  
+  // 優先使用 Intl.Segmenter (現代瀏覽器與 RN Hermes 支援)
+  // 這能精確區分語素，例如將家族 Emoji 視為 1 個字
+  if (typeof Intl !== 'undefined' && 'Segmenter' in Intl) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const segmenter = new (Intl as any).Segmenter();
+    return [...segmenter.segment(text)].length;
+  }
+  
+  // 備案：使用 Array.from (可正確處理一般擴充字元，但無法處理 ZWJ Emoji 組合)
+  return Array.from(text).length;
+};
