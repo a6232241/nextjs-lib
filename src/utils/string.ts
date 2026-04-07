@@ -1,10 +1,9 @@
 /**
  * 將文字中第一個匹配搜尋字串的部分進行標記與拆解。
- * 回傳的陣列中，`highlight: true` 的項目代表匹配的部分，可用於在 UI 上呈現搜尋高亮效果。
  * 
- * @param text - 要搜尋的文字原文
- * @param search - 要搜尋及高亮的目標字串
- * @returns - 拆解後的陣列，其中 highlight 為 true 的部分表示符合 search
+ * @param text 要被搜尋的文字原文
+ * @param search 要搜尋及高亮的目標字串
+ * @returns 拆解後的陣列，其中 highlight 為 true 的部分表示符合 search
  */
 export const getFirstHighlightedText = (text: string, search: string) => {
   if (!search) return [{ text: text, highlight: false }];
